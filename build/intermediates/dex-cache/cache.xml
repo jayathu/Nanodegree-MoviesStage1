@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/jnagaraj/AndroidStudioProjects/git/Project1/Showtime/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/jnagaraj/AndroidStudioProjects/git/Project1/Showtime/app/build/intermediates/pre-dexed/debug/classes-c89d26ddd38134bce3839ad0cbdfe1495a23c5e2.jar" />
+    </item>
+    <item
+        jar="/Users/jnagaraj/AndroidStudioProjects/git/Showtime_Stage1_git/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/jnagaraj/AndroidStudioProjects/git/Showtime_Stage1_git/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-cc0412511d0c58910675dcc5dbc1f9bff14172f7.jar" />
+    </item>
+    <item
+        jar="/Users/jnagaraj/AndroidStudioProjects/git/Showtime_Stage1_git/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/jnagaraj/AndroidStudioProjects/git/Showtime_Stage1_git/app/build/intermediates/pre-dexed/debug/classes-6234461d38901c965350879a3d3a889f394903d9.jar" />
+    </item>
+    <item
+        jar="/Users/jnagaraj/AndroidStudioProjects/git/Project1/Showtime/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Users/jnagaraj/AndroidStudioProjects/git/Project1/Showtime/app/build/intermediates/pre-dexed/debug/classes-bb46838097a747272c197662a94f9efe8f17e791.jar" />
+    </item>
+    <item
+        jar="/Users/jnagaraj/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/Users/jnagaraj/AndroidStudioProjects/git/Showtime_Stage1_git/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-83fe03ed6d6869df6402e757c0a5a47469b1e19e.jar" />
+    </item>
+    <item
+        jar="/Users/jnagaraj/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/jnagaraj/AndroidStudioProjects/git/Project1/Showtime/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-4b07332f345eb5406b6dfb34d82caeeb72e7eb08.jar" />
+    </item>
+    <item
+        jar="/Users/jnagaraj/AndroidStudioProjects/git/Project1/Showtime/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/jnagaraj/AndroidStudioProjects/git/Project1/Showtime/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-c103c5c557837e15a1fbe7cfd4d2c22929b1b7dd.jar" />
+    </item>
+    <item
+        jar="/Users/jnagaraj/AndroidStudioProjects/git/Showtime_Stage1_git/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Users/jnagaraj/AndroidStudioProjects/git/Showtime_Stage1_git/app/build/intermediates/pre-dexed/debug/classes-0d310774a6da9e7998c940c96b1c7cc45106453b.jar" />
+    </item>
+
+</items>
