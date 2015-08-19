@@ -6,13 +6,26 @@ import android.graphics.Bitmap;
  * Created by jnagaraj on 8/17/15.
  */
 public class ImageItem {
+
     String title;
 
-    int image;
+    int imageIndex;
 
-    public ImageItem(String title, int image)
+    String posterURL;
+
+    public void SetImagePath(String stringURL)
+    {
+        posterURL = stringURL;
+    }
+
+    public String getPosterURL()
+    {
+        return posterURL;
+    }
+
+    public ImageItem(String title, int index)
     {
         this.title = title;
-        this.image = image;
+        this.imageIndex = index;
     }
 }

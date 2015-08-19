@@ -1,15 +1,15 @@
 package com.udacity.nanodegree.showtime;
 
 import android.app.Activity;
-import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +19,17 @@ import java.util.List;
  */
 public class GridViewAdapter extends ArrayAdapter<ImageItem> {
 
+    private ArrayList<ImageItem> mImageItems = new ArrayList<>();
+
     public GridViewAdapter(Activity context, List<ImageItem> imageItems)
     {
         super(context, 0, imageItems);
+    }
+
+    public void setGridData(ArrayList<ImageItem> imageItems)
+    {
+        this.mImageItems = imageItems;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -39,13 +47,16 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem> {
             //holder.imageTitle = (TextView) row.findViewById(R.id.text);
             holder.image = (ImageView) row.findViewById(R.id.image);
             row.setTag(holder);
+
+            ImageItem item = mImageItems.get(position);
+            Picasso.with(getContext()).load(item.getPosterURL()).into(holder.image);
         } else {
             holder = (ViewHolder) row.getTag();
         }
 
         ImageItem imageItem = getItem(position);
         //holder.imageTitle.setText(imageItem.title);
-        holder.image.setImageResource(imageItem.image);
+        holder.image.setImageResource(imageItem.imageIndex);
         return row;
     }
 
