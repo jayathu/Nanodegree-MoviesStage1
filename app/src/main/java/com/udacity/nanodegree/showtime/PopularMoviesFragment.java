@@ -1,9 +1,12 @@
 package com.udacity.nanodegree.showtime;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -87,7 +90,6 @@ public class PopularMoviesFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //gridViewAdapter = new GridViewAdapter(getActivity(), Arrays.asList(imageItems));
         gridViewAdapter = new GridViewAdapter(getActivity(), new ArrayList<ImageItem>());
 
         gridView = (GridView) rootView.findViewById(R.id.gridview_showtime);
@@ -100,6 +102,12 @@ public class PopularMoviesFragment extends Fragment {
 
                 String msg = gridViewAdapter.getItem(position).title;
                 Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+
+                ImageItem gridItem = gridViewAdapter.getItem(position);
+
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                                                .putExtra(Intent.EXTRA_TEXT, gridItem.title);
+                startActivity(intent);
             }
 
         });
@@ -119,9 +127,25 @@ public class PopularMoviesFragment extends Fragment {
             BufferedReader reader = null;
             String movieJsonStr = null;
 
+            //final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=";
+            //final String API_KEY = "a21c54a991f730b8a3df5a3a6b33e941";
             try {
-                final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a21c54a991f730b8a3df5a3a6b33e941";
 
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String sort_type = sharedPreferences.getString("sortby", "0");
+
+                String MOVIE_BASE_URL = "";
+                Log.v("Sort type = ", sort_type);
+                if(sort_type.equals("0"))
+                {
+                    Log.v(LOG_TAG, "Popularity");
+                    MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a21c54a991f730b8a3df5a3a6b33e941";
+                }
+                else
+                {
+                    Log.v(LOG_TAG, "Average Rating");
+                    MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a21c54a991f730b8a3df5a3a6b33e941";
+                }
 
                 URL url = new URL(MOVIE_BASE_URL);
 
@@ -216,6 +240,7 @@ public class PopularMoviesFragment extends Fragment {
             gridViewAdapter.clear();
             for(ImageItem img : imageItems) {
                 Log.v(LOG_TAG, "Movies :: " + img.getPosterURL());
+                gridViewAdapter.clear();
                 gridViewAdapter.add(img);
 
             }
