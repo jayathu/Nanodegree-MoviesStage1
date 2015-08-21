@@ -2,9 +2,7 @@ package com.udacity.nanodegree.showtime;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -28,7 +26,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 /**
@@ -41,33 +38,7 @@ public class PopularMoviesFragment extends Fragment {
     private GridView gridView;
     private GridViewAdapter gridViewAdapter;
 
-    ArrayList<ImageItem> imageItems = new ArrayList<>();
-
-//    ImageItem[] imageItems = {
-//            new ImageItem("Image 0", R.drawable.sample_0),
-//            new ImageItem("Image 1", R.drawable.sample_1),
-//            new ImageItem("Image 2", R.drawable.sample_2),
-//            new ImageItem("Image 3", R.drawable.sample_3),
-//            new ImageItem("Image 4", R.drawable.sample_4),
-//            new ImageItem("Image 5", R.drawable.sample_5),
-//            new ImageItem("Image 6", R.drawable.sample_6),
-//            new ImageItem("Image 0", R.drawable.sample_0),
-//            new ImageItem("Image 1", R.drawable.sample_1),
-//            new ImageItem("Image 2", R.drawable.sample_2),
-//            new ImageItem("Image 3", R.drawable.sample_3),
-//            new ImageItem("Image 4", R.drawable.sample_4),
-//            new ImageItem("Image 5", R.drawable.sample_5),
-//            new ImageItem("Image 6", R.drawable.sample_6),
-//            new ImageItem("Image 0", R.drawable.sample_0),
-//            new ImageItem("Image 1", R.drawable.sample_1),
-//            new ImageItem("Image 2", R.drawable.sample_2),
-//            new ImageItem("Image 3", R.drawable.sample_3),
-//            new ImageItem("Image 4", R.drawable.sample_4),
-//            new ImageItem("Image 5", R.drawable.sample_5),
-//            new ImageItem("Image 6", R.drawable.sample_6)
-//
-//
-//    };
+    //ArrayList<ImageItem> imageItemsCache = new ArrayList<>();
 
     public PopularMoviesFragment() {
     }
@@ -82,7 +53,10 @@ public class PopularMoviesFragment extends Fragment {
     private void updateMovieData()
     {
         FetchPopularMovies moviesTask = new FetchPopularMovies();
-        moviesTask.execute();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sort_type = sharedPreferences.getString("sortby", "0");
+
+        moviesTask.execute(sort_type);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,38 +90,52 @@ public class PopularMoviesFragment extends Fragment {
     }
 
     //Inner class to asynchronously fetch movie data from the server
-    class FetchPopularMovies extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
+    class FetchPopularMovies extends AsyncTask<String, Void, ArrayList<ImageItem>> {
         private final String LOG_TAG = FetchPopularMovies.class.getSimpleName();
 
+        ArrayList<ImageItem> imageItemsCache = new ArrayList<>();
         InputStream inputStream;
         @Override
-        protected ArrayList<ImageItem> doInBackground(Void... params) {
+        protected ArrayList<ImageItem> doInBackground(String... params) {
 
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String movieJsonStr = null;
 
-            //final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=";
-            //final String API_KEY = "a21c54a991f730b8a3df5a3a6b33e941";
+
+            String sort_by_clause = "";
+
+            String popularity = "popularity.desc";
+            String ratings = "vote_average.desc";
+
+
+            if(params[0].equals("0"))
+            {
+                sort_by_clause = popularity;
+            }
+            else
+            {
+                sort_by_clause = ratings;
+            }
+            String api_key = "a21c54a991f730b8a3df5a3a6b33e941";
+
             try {
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String sort_type = sharedPreferences.getString("sortby", "0");
+                Log.v("Sort type = ", sort_by_clause);
 
-                String MOVIE_BASE_URL = "";
-                Log.v("Sort type = ", sort_type);
-                if(sort_type.equals("0"))
-                {
-                    Log.v(LOG_TAG, "Popularity");
-                    MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a21c54a991f730b8a3df5a3a6b33e941";
-                }
-                else
-                {
-                    Log.v(LOG_TAG, "Average Rating");
-                    MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a21c54a991f730b8a3df5a3a6b33e941";
-                }
 
-                URL url = new URL(MOVIE_BASE_URL);
+                final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
+                final String FORMAT_PARAM = "sort_by";
+                final String API = "api_key";
+
+                Uri builtUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                        .appendQueryParameter(FORMAT_PARAM, sort_by_clause)
+                        .appendQueryParameter(API, api_key)
+                        .build();
+
+                URL url  = new URL(builtUrl.toString());
+
+                Log.v(LOG_TAG, "Built URL" + builtUrl.toString());
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -214,6 +202,8 @@ public class PopularMoviesFragment extends Fragment {
             movieOverview = new String[movieArray.length()];
             moviePosterPath = new String[movieArray.length()];
 
+            Log.v(LOG_TAG, movieArray.length() + "");
+            //imageItemsCache.clear();
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.getJSONObject(i);
                 movieId[i] = movie.getString("id");
@@ -224,27 +214,27 @@ public class PopularMoviesFragment extends Fragment {
                 moviePosterPath[i] = movie.getString("poster_path");
                 ImageItem item = new ImageItem(movieTitle[i], 0);
                 item.SetImagePath(BASE_URL+moviePosterPath[i]);
-                imageItems.add(item);
+                imageItemsCache.add(item);
             }
 
-            return imageItems;
+            return imageItemsCache;
         }
 
 
         @Override
-        protected void onPostExecute(ArrayList<ImageItem> imageItems)
-        {
-            Log.v(LOG_TAG, "Movies");
-            super.onPostExecute(imageItems);
+        protected void onPostExecute(ArrayList<ImageItem> imageItems) {
 
-            gridViewAdapter.clear();
-            for(ImageItem img : imageItems) {
-                Log.v(LOG_TAG, "Movies :: " + img.getPosterURL());
+            if (imageItems != null) {
+
                 gridViewAdapter.clear();
-                gridViewAdapter.add(img);
 
+                for (ImageItem img : imageItems) {
+                    Log.v(LOG_TAG, "Movies :: " + img.title);
+                    gridViewAdapter.add(img);
+
+                }
+                gridViewAdapter.setGridData(imageItems);
             }
-            gridViewAdapter.setGridData(imageItems);
         }
 
     }

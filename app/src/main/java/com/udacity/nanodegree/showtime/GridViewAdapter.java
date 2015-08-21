@@ -35,8 +35,6 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        //View rootView = LayoutInflater.from(getContext()).inflate(R.layout.grid_item_layout_showtime, parent, false);
-
         View row = convertView;
         ViewHolder holder = null;
 
@@ -44,19 +42,15 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.grid_item_layout_showtime, parent, false);
             holder = new ViewHolder();
-            //holder.imageTitle = (TextView) row.findViewById(R.id.text);
             holder.image = (ImageView) row.findViewById(R.id.image);
             row.setTag(holder);
 
-            ImageItem item = mImageItems.get(position);
-            Picasso.with(getContext()).load(item.getPosterURL()).into(holder.image);
         } else {
             holder = (ViewHolder) row.getTag();
         }
 
-        ImageItem imageItem = getItem(position);
-        //holder.imageTitle.setText(imageItem.title);
-        holder.image.setImageResource(imageItem.imageIndex);
+        ImageItem item = mImageItems.get(position);
+        Picasso.with(getContext()).load(item.getPosterURL()).into(holder.image);
         return row;
     }
 

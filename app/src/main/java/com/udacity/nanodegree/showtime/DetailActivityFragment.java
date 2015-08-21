@@ -23,12 +23,12 @@ public class DetailActivityFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        Intent intent = getActivity().getIntent();
-        if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT))
-        {
-            String title = intent.getStringExtra(Intent.EXTRA_TEXT);
-            ((TextView)rootView.findViewById(R.id.detail_text)).setText(title);
-        }
+//        Intent intent = getActivity().getIntent();
+//        if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT))
+//        {
+//            String title = intent.getStringExtra(Intent.EXTRA_TEXT);
+//            ((TextView)rootView.findViewById(R.id.detail_text)).setText(title);
+//        }
         return rootView;
     }
 }
