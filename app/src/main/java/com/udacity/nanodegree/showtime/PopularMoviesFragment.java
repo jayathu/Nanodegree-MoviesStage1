@@ -117,10 +117,9 @@ public class PopularMoviesFragment extends Fragment {
             {
                 sort_by_clause = ratings;
             }
-            String api_key = "a21c54a991f730b8a3df5a3a6b33e941";
+            String api_key = "";
 
             try {
-
                 Log.v("Sort type = ", sort_by_clause);
 
 
