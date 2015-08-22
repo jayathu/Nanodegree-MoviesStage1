@@ -50,12 +50,11 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem> {
         }
 
         ImageItem item = mImageItems.get(position);
-        Picasso.with(getContext()).load(item.getPosterURL()).into(holder.image);
+        Picasso.with(getContext()).load(item.posterURL).into(holder.image);
         return row;
     }
 
     static class ViewHolder {
-        TextView imageTitle;
         ImageView image;
     }
 }

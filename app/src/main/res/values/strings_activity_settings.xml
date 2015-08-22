@@ -48,6 +48,7 @@
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
+    <string name="movie_title">movie_title</string>
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 

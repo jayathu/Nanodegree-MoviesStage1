@@ -7,19 +7,16 @@
     tools:context="com.udacity.nanodegree.showtime.DetailActivityFragment">
 
     <TextView
-        android:id="@+id/detail_text"
+        android:id="@+id/detail_movie_title"
         android:text="@string/hello_world"
         android:layout_width="match_parent"
         android:layout_height="84dp"
-        android:background="#009688"
-        android:textSize="34sp"
+        android:background="@color/white"
+        android:textSize="24sp"
         android:paddingLeft="16dp"
-        android:layout_gravity="center"
+        android:gravity="center_vertical"
         android:textColor="@color/blue_grey_light"
         />
-
-
-
 
         <LinearLayout
         android:layout_width="match_parent"
@@ -45,22 +42,26 @@
             android:layout_margin="16dp">
 
                 <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="34sp"
-                android:text="2015"/>
+                    android:id="@+id/detail_release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="2015"/>
 
                 <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="120 min"/>
+                    android:id="@+id/detail_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    android:text="120 min"/>
 
                 <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="11/05/2014"/>
+                    android:id="@+id/detail_vote_average"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="8.2/10"/>
 
             </LinearLayout>
 
@@ -75,13 +76,13 @@
             android:orientation="vertical">
 
         <TextView
-        android:id="@+id/movie_desc"
+        android:id="@+id/detail_movie_synopsis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:paddingLeft="16dp"
         android:textAlignment="center"
-        android:text="Interstellar chronicles the adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage."/>
+        />
 
 
         <TextView

@@ -2,6 +2,7 @@ package com.udacity.nanodegree.showtime;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -33,12 +34,10 @@ import java.util.ArrayList;
  */
 public class PopularMoviesFragment extends Fragment {
 
-    String[] movieId, movieTitle, movieReleaseDate, movieVoteAverage, movieOverview, moviePosterPath;
+    private final String LOG_TAG = PopularMoviesFragment.class.getSimpleName();
 
     private GridView gridView;
     private GridViewAdapter gridViewAdapter;
-
-    //ArrayList<ImageItem> imageItemsCache = new ArrayList<>();
 
     public PopularMoviesFragment() {
     }
@@ -74,13 +73,14 @@ public class PopularMoviesFragment extends Fragment {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String msg = gridViewAdapter.getItem(position).title;
-                Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                //String msg = gridViewAdapter.getItem(position).movie_title;
+                //Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
                 ImageItem gridItem = gridViewAdapter.getItem(position);
 
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                                                .putExtra(Intent.EXTRA_TEXT, gridItem.title);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("movie_details", gridItem);
+                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtras(bundle);
                 startActivity(intent);
             }
 
@@ -195,25 +195,16 @@ public class PopularMoviesFragment extends Fragment {
             final String BASE_URL = "http://image.tmdb.org/t/p/w185/";
             JSONObject movieJson = new JSONObject(forecastJsonStr);
             JSONArray movieArray = movieJson.getJSONArray("results");
-            movieId = new String[movieArray.length()];
-            movieTitle = new String[movieArray.length()];
-            movieReleaseDate = new String[movieArray.length()];
-            movieVoteAverage = new String[movieArray.length()];
-            movieOverview = new String[movieArray.length()];
-            moviePosterPath = new String[movieArray.length()];
-
             Log.v(LOG_TAG, movieArray.length() + "");
-            //imageItemsCache.clear();
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.getJSONObject(i);
-                movieId[i] = movie.getString("id");
-                movieTitle[i] = movie.getString("original_title");
-                movieReleaseDate[i] = movie.getString("release_date");
-                movieVoteAverage[i] = movie.getString("vote_average");
-                movieOverview[i] = movie.getString("overview");
-                moviePosterPath[i] = movie.getString("poster_path");
-                ImageItem item = new ImageItem(movieTitle[i], 0);
-                item.SetImagePath(BASE_URL+moviePosterPath[i]);
+                ImageItem item = new ImageItem(
+                                        movie.getString("original_title"),
+                                        BASE_URL+movie.getString("poster_path"),
+                                        movie.getString("release_date"),
+                                        movie.getString("overview"),
+                                        movie.getString("vote_average") + "/10"
+                                    );
                 imageItemsCache.add(item);
             }
 
@@ -229,7 +220,7 @@ public class PopularMoviesFragment extends Fragment {
                 gridViewAdapter.clear();
 
                 for (ImageItem img : imageItems) {
-                    Log.v(LOG_TAG, "Movies :: " + img.title);
+                   // Log.v(LOG_TAG, "Movies :: " + img.movie_title);
                     gridViewAdapter.add(img);
 
                 }
