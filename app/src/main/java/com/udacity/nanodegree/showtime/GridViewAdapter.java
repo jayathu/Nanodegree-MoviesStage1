@@ -2,6 +2,7 @@ package com.udacity.nanodegree.showtime;
 
 import android.app.Activity;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import java.util.List;
  */
 public class GridViewAdapter extends ArrayAdapter<ImageItem> {
 
+    private final String LOG_TAG = PopularMoviesFragment.class.getSimpleName();
+
     private ArrayList<ImageItem> mImageItems = new ArrayList<>();
 
     public GridViewAdapter(Activity context, List<ImageItem> imageItems)
@@ -29,6 +32,7 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem> {
     public void setGridData(ArrayList<ImageItem> imageItems)
     {
         this.mImageItems = imageItems;
+        Log.v(LOG_TAG, "setGridData::length = " + imageItems.toArray().length);
         notifyDataSetChanged();
     }
 
@@ -39,6 +43,7 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem> {
         ViewHolder holder = null;
 
         if (row == null) {
+
             LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.grid_item_layout_showtime, parent, false);
             holder = new ViewHolder();

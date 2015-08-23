@@ -2,7 +2,7 @@ package com.udacity.nanodegree.showtime;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -34,12 +34,27 @@ import java.util.ArrayList;
  */
 public class PopularMoviesFragment extends Fragment {
 
+    private String SAVED_MOVIE_DATA;
     private final String LOG_TAG = PopularMoviesFragment.class.getSimpleName();
-
-    private GridView gridView;
-    private GridViewAdapter gridViewAdapter;
+    private ArrayList<ImageItem> mImageItemsCache ;//= new ArrayList<>();
+    private GridView mGridView;
+    private GridViewAdapter mGridViewAdapter;
 
     public PopularMoviesFragment() {
+    }
+
+    @Override
+    public  void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        if(savedInstanceState == null || !savedInstanceState.containsKey(SAVED_MOVIE_DATA)) {
+
+            mImageItemsCache = new ArrayList<>();
+
+        }else {
+            mImageItemsCache = savedInstanceState.getParcelableArrayList(SAVED_MOVIE_DATA);
+        }
     }
 
     @Override
@@ -49,34 +64,55 @@ public class PopularMoviesFragment extends Fragment {
     }
 
 
-    private void updateMovieData()
-    {
-        FetchPopularMovies moviesTask = new FetchPopularMovies();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sort_type = sharedPreferences.getString("sortby", "0");
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
 
-        moviesTask.execute(sort_type);
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelableArrayList(SAVED_MOVIE_DATA, mImageItemsCache);
+
     }
+
+    private void updateMovieData() {
+
+        if(mImageItemsCache.isEmpty()) {
+            FetchPopularMovies moviesTask = new FetchPopularMovies();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String sort_type = sharedPreferences.getString("sortby", "0");
+
+            moviesTask.execute(sort_type);
+        }
+        else {
+            //fetch cached data list from the saveInstanceCallback and update the adapter
+            if (mImageItemsCache.toArray().length != 0) {
+                for (ImageItem img : mImageItemsCache) {
+                    mGridViewAdapter.add(img);
+
+                }
+                mGridViewAdapter.setGridData(mImageItemsCache);
+            }
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        gridViewAdapter = new GridViewAdapter(getActivity(), new ArrayList<ImageItem>());
+        mGridViewAdapter = new GridViewAdapter(getActivity(), new ArrayList<ImageItem>());
 
-        gridView = (GridView) rootView.findViewById(R.id.gridview_showtime);
+        mGridView = (GridView) rootView.findViewById(R.id.gridview_showtime);
 
-        gridView.setAdapter(gridViewAdapter);
+        mGridView.setAdapter(mGridViewAdapter);
 
-        gridView.setOnItemClickListener(new GridView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new GridView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //String msg = gridViewAdapter.getItem(position).movie_title;
+                //String msg = mGridViewAdapter.getItem(position).movie_title;
                 //Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
-                ImageItem gridItem = gridViewAdapter.getItem(position);
+                ImageItem gridItem = mGridViewAdapter.getItem(position);
 
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("movie_details", gridItem);
@@ -93,7 +129,7 @@ public class PopularMoviesFragment extends Fragment {
     class FetchPopularMovies extends AsyncTask<String, Void, ArrayList<ImageItem>> {
         private final String LOG_TAG = FetchPopularMovies.class.getSimpleName();
 
-        ArrayList<ImageItem> imageItemsCache = new ArrayList<>();
+
         InputStream inputStream;
         @Override
         protected ArrayList<ImageItem> doInBackground(String... params) {
@@ -195,6 +231,7 @@ public class PopularMoviesFragment extends Fragment {
             JSONObject movieJson = new JSONObject(forecastJsonStr);
             JSONArray movieArray = movieJson.getJSONArray("results");
             Log.v(LOG_TAG, movieArray.length() + "");
+            mImageItemsCache.clear();
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.getJSONObject(i);
                 ImageItem item = new ImageItem(
@@ -204,10 +241,10 @@ public class PopularMoviesFragment extends Fragment {
                                         movie.getString("overview"),
                                         movie.getString("vote_average") + "/10"
                                     );
-                imageItemsCache.add(item);
+                mImageItemsCache.add(item);
             }
 
-            return imageItemsCache;
+            return mImageItemsCache;
         }
 
 
@@ -216,14 +253,13 @@ public class PopularMoviesFragment extends Fragment {
 
             if (imageItems != null) {
 
-                gridViewAdapter.clear();
+                mGridViewAdapter.clear();
 
                 for (ImageItem img : imageItems) {
-                   // Log.v(LOG_TAG, "Movies :: " + img.movie_title);
-                    gridViewAdapter.add(img);
+                    mGridViewAdapter.add(img);
 
                 }
-                gridViewAdapter.setGridData(imageItems);
+                mGridViewAdapter.setGridData(imageItems);
             }
         }
 
