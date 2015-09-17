@@ -168,6 +168,7 @@ public class PopularMoviesFragment extends Fragment {
                         .appendQueryParameter(API, api_key)
                         .build();
 
+                Log.v(LOG_TAG, builtUrl.toString());
                 URL url  = new URL(builtUrl.toString());
 
                 Log.v(LOG_TAG, "Built URL" + builtUrl.toString());
